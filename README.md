@@ -23,7 +23,7 @@
 1. Clona el repositorio:
 
     ```bash
-    git clone https://github.com/tu_usuario/RelayNetCommander.git
+    git clone https://github.com/fvargas1644/RelayNetCommander.git
     cd RelayNetCommander
     ```
 
